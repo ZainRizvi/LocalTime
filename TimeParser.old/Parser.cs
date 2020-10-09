@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using WebApplication1.Models;
 
-namespace WebApplication1.Controllers
+namespace TimeParser
 {
-    public class HomeController : Controller
+    public class Parser
     {
-        private readonly ILogger<HomeController> _logger;
-
 
         readonly Dictionary<string, string> _timeZones = new Dictionary<string, string>() {
             {"ACDT", "+1030"},
@@ -100,42 +92,18 @@ namespace WebApplication1.Controllers
             {"ZP6", "+0600"}
         };
 
-
-        public HomeController(ILogger<HomeController> logger)
+        public DateTime GetUTCTime(string time, string timezone)
         {
-            _logger = logger;
+            var t = DateTime.Parse("5pm");
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time");
+            var tz2 = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var newtime = TimeZoneInfo.ConvertTime(t, tz, tz2);
+            return newtime;
         }
 
-        public IActionResult Index()
+        public string GetLocalTime(DateTime utcTime)
         {
-            ViewBag.domain = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
-            ViewBag.host = HttpContext.Request.Host;
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [Route("{time}/{timezone}")]
-        public IActionResult GetTime(string time, string timezone)
-        {
-            return Redirect($"https://www.google.com/search?q={time}+{timezone}");
-
-            //ViewBag.date = "";
-            //ViewBag.timestr = time;
-            //ViewBag.timezone = timezone;
-            //ViewBag.offset = _timeZones[timezone.ToUpper()];
-            //ViewBag.time = DateTime.Parse(time);
-            //return View("Time");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            //return Redirect("https://www.google.com/search?q=7pm+IRST");
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            throw new NotImplementedException();
         }
     }
 }

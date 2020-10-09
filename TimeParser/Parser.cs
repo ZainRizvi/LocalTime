@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using WebApplication1.Models;
+using TimeZoneConverter;
 
-namespace WebApplication1.Controllers
+namespace TimeParser
 {
-    public class HomeController : Controller
+    public class Parser
     {
-        private readonly ILogger<HomeController> _logger;
-
 
         readonly Dictionary<string, string> _timeZones = new Dictionary<string, string>() {
             {"ACDT", "+1030"},
@@ -100,42 +93,50 @@ namespace WebApplication1.Controllers
             {"ZP6", "+0600"}
         };
 
+        readonly Dictionary<string, string> _timeZoneExpansions = new Dictionary<string, string>() {
+            { "PST", "Pacific Standard Time" },
+            { "MST", "Mountain Standard Time" },
+            { "CST", "Central Standard Time" },
+            { "EST", "Eastern Standard Time" },
+            { "PST", "Pakistan Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+            { "PST", "Pacific Standard Time" },
+        };
 
-        public HomeController(ILogger<HomeController> logger)
+        public DateTime GetUTCTime(string time, string timezone)
         {
-            _logger = logger;
+            TimeZoneInfo tzi = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+            
+            Console.WriteLine(tzi);
+
+            var t = DateTime.Parse("5pm");
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time");
+            var tz2 = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var newtime = TimeZoneInfo.ConvertTime(t, tz, tz2);
+            return newtime;
         }
 
-        public IActionResult Index()
+        public TimeSpan GetUtcOffset(string timezone)
         {
-            ViewBag.domain = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
-            ViewBag.host = HttpContext.Request.Host;
-            return View();
+            
+            TimeZoneInfo tzi = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+            return tzi.GetUtcOffset(DateTime.Now); // The passed in datetime doesn't actually matter
         }
 
-        public IActionResult Privacy()
+        public String ExpandTimeZoneAbbreviation(string timezoneAbbreviation)
         {
-            return View();
+            throw new NotImplementedException();
         }
 
-        [Route("{time}/{timezone}")]
-        public IActionResult GetTime(string time, string timezone)
+        public string GetLocalTime(DateTime utcTime)
         {
-            return Redirect($"https://www.google.com/search?q={time}+{timezone}");
-
-            //ViewBag.date = "";
-            //ViewBag.timestr = time;
-            //ViewBag.timezone = timezone;
-            //ViewBag.offset = _timeZones[timezone.ToUpper()];
-            //ViewBag.time = DateTime.Parse(time);
-            //return View("Time");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            //return Redirect("https://www.google.com/search?q=7pm+IRST");
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            throw new NotImplementedException();
         }
     }
 }

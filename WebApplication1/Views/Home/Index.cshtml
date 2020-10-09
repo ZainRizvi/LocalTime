@@ -1,8 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var domain = ViewBag.domain;
+    var host = ViewBag.host;
+    string time;
+    string url;
+    string display_url;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Create easy links to share the time</h1>
+    <p>How do you do it?</p>
+    <p>You write a link that looks like:</p>
+    <p><a href="/">@(host + "/<time>/<timezone>")</a></p>
+    <p>Here are a few examples:</p>
+    @{ time = "/5pm/pst"; url = domain + time; display_url = host + time;}
+    <p><a href="@url">@display_url</a></p>
+    @{ time = "/2:15pm/ist"; url = domain + time; display_url = host + time;}
+    <p><a href="@url">@display_url</a></p>
+    @{ time = "/9:53pm/GMT"; url = domain + time; display_url = host + time;}
+    <p><a href="@url">@display_url</a></p>
+    @{ time = "/6pm/SAST"; url = domain + time; display_url = host + time;}
+    <p><a href="@domain">@display_url</a></p>
+    @*@Html.ActionLink("Sample time - 5pm CST", "GetTime", "Home", new { time = "5pm", timezone = "CST" }, null)*@
 </div>
